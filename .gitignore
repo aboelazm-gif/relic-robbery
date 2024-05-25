@@ -70,11 +70,6 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /RELIC_ROBBERY/[Aa]ssets/[Ss]treamingAssets/aa.meta
 /RELIC_ROBBERY/[Aa]ssets/[Ss]treamingAssets/aa/*
-/RELIC_ROBBERY/[Aa]ssets/[Pp]refabs/*
-/RELIC_ROBBERY/[Aa]ssets/[Dd]ecor/*
-/RELIC_ROBBERY/[Aa]ssets/[Ss]kySeries [Ff]reebie/*
-/RELIC_ROBBERY/[Aa]ssets/[Uu]rbanNightSky/*
-/RELIC_ROBBERY/[Aa]ssets/[Aa]nimations/*
-/RELIC_ROBBERY/[Aa]ssets/[Mm]aterials/*
+/RELIC_ROBBERY/[Aa]ssets/*
 *.blend
 *.blend1
