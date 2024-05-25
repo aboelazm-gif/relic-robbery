@@ -12985,13 +12985,14 @@ MonoBehaviour:
   controller: {fileID: 805706822}
   Camera: {fileID: 1640988329}
   moveSpeed: 6
-  sprintMultiplier: 20
+  sprintMultiplier: 2
   jumpHeight: 3
   transitionSmoothing: 5
   groundCheck: {fileID: 884172403}
   gravity: -9.81
   groundDistance: 0.4
   animator: {fileID: 2119408499}
+  weapon: {fileID: 1699222481}
 --- !u!114 &805706824
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27319,7 +27320,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 41517daf36a7a6447bcc55b1b2a23d77, type: 3}
       propertyPath: m_Name
-      value: lp (1)
+      value: Knife
       objectReference: {fileID: 0}
     - target: {fileID: 3765108852280629433, guid: 41517daf36a7a6447bcc55b1b2a23d77, type: 3}
       propertyPath: m_Materials.Array.data[0]

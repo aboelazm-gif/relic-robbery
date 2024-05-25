@@ -16,7 +16,11 @@ public class MovementScript : MonoBehaviour
     public float groundDistance = 0.4f;
     public Animator animator;
 
+    public GameObject weapon;
+
     bool isSprinting = false;
+
+    bool armed = false;
 
     float sprint()
     {
@@ -33,6 +37,8 @@ public class MovementScript : MonoBehaviour
     }
     void Update()
     {
+        if (armed && !weapon.gameObject.activeSelf) weapon.SetActive(true);
+        if (!armed && weapon.gameObject.activeSelf) weapon.SetActive(false);
         //Movement
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");
@@ -65,6 +71,7 @@ public class MovementScript : MonoBehaviour
             animator.SetBool("walk", false);
         }
         //Gravity
+        animator.SetBool("airborne", !isGrounded());
         if (isGrounded() && fallVelocity.y < 0)
         {
             fallVelocity.y = -2f;
@@ -74,6 +81,7 @@ public class MovementScript : MonoBehaviour
         //Jumping
         if (Input.GetButtonDown("Jump") && isGrounded())
         {
+            animator.SetTrigger("Jump");
             fallVelocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
         //Sprinting
