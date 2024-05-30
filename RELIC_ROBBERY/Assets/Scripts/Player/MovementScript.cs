@@ -17,12 +17,10 @@ public class MovementScript : MonoBehaviour
     public float groundDistance = 0.4f;
     public Animator animator;
 
-    public GameObject weapon;
 
     bool isSprinting = false;
     bool isMoving = false;
     bool isCrouching = false;
-    bool armed = false;
     bool stealth = false;
 
     float fallTimer = 0;
@@ -55,8 +53,7 @@ public class MovementScript : MonoBehaviour
 
     void Update()
     {
-        if (armed && !weapon.gameObject.activeSelf) weapon.SetActive(true);
-        if (!armed && weapon.gameObject.activeSelf) weapon.SetActive(false);
+
 
         //Movement
         float moveX = Input.GetAxisRaw("Horizontal");
@@ -99,7 +96,6 @@ public class MovementScript : MonoBehaviour
         }
 
         // Gravity
-        Debug.Log(fallTimer);
         if (fallTimer > 0.3f) animator.SetBool("airborne", true); // Check if the player has been falling for more than 0.3 seconds to avoid the fall animation when going down stairs
         if (isGrounded() && fallVelocity.y < 0)
         {
