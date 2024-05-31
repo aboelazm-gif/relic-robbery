@@ -44,7 +44,7 @@ public class Stealable : MonoBehaviour, IInteractables
 
         }
         Player.GetComponent<ObjectInteract>().score += stealValue;
-        Debug.Log(Player.GetComponent<ObjectInteract>().score);
         Destroy(gameObject);
+        Player.transform.GetChild(0).GetComponent<Animator>().SetTrigger("Loot");
     }
 }

@@ -13,14 +13,14 @@ public class MovementScript : MonoBehaviour
     public float jumpHeight = 3f;
     public float transitionSmoothing = 3f;
     public Transform groundCheck;
-    public float gravity = -9.81f;
+    public float gravity = -12f;
     public float groundDistance = 0.4f;
     public Animator animator;
 
 
     bool isSprinting = false;
     bool isMoving = false;
-    bool isCrouching = false;
+    [HideInInspector] public bool isCrouching = false;
     bool stealth = false;
 
     float fallTimer = 0;
@@ -38,7 +38,7 @@ public class MovementScript : MonoBehaviour
 
     Vector3 fallVelocity;
 
-    bool isGrounded()
+    public bool isGrounded()
     {
         return Physics.CheckSphere(groundCheck.position, groundDistance, LayerMask.GetMask("Ground"));
     }
@@ -54,15 +54,16 @@ public class MovementScript : MonoBehaviour
     void Update()
     {
 
-
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Take Item")) return;
         //Movement
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Hit1") || animator.GetCurrentAnimatorStateInfo(0).IsName("Hit2")) return;
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");
         Vector3 moveDirection = new Vector3(moveX, 0, moveY).normalized;
 
         // Smooth transition for the moveY animator parameter
         float currentMoveY = animator.GetFloat("moveY");
-        if (Mathf.Abs(moveY - currentMoveY) > 0.01f) // Use a small threshold to determine when to stop smoothing
+        if (Mathf.Abs(moveY - currentMoveY) > 0.01f)
         {
             animator.SetFloat("moveY", Mathf.Lerp(currentMoveY, moveY, transitionSmoothing * Time.deltaTime));
         }
@@ -74,7 +75,7 @@ public class MovementScript : MonoBehaviour
         // Smooth transition for the moveX animator parameter
         float currentMoveX = animator.GetFloat("moveX");
         isMoving = moveDirection.magnitude >= 0.1f;
-        if (Mathf.Abs(moveX - currentMoveX) > 0.01f) // Use a small threshold to determine when to stop smoothing
+        if (Mathf.Abs(moveX - currentMoveX) > 0.01f)
         {
             animator.SetFloat("moveX", Mathf.Lerp(currentMoveX, moveX, transitionSmoothing * Time.deltaTime));
         }

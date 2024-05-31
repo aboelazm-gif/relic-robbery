@@ -14,6 +14,7 @@ public class ObjectInteract : MonoBehaviour
     public float interactDistance = 5f;
 
     [HideInInspector] public int score = 0;
+    [HideInInspector] public bool canInteract = false;
 
 
 
@@ -32,6 +33,7 @@ public class ObjectInteract : MonoBehaviour
             if (hit.collider.tag == "Interactable" || hit.collider.tag == "Stealable")
             {
                 Cursor.sprite = Interact;
+                canInteract = true;
                 if (Input.GetButtonDown("Fire1"))
                 {
                     hit.collider.GetComponent<Interactable>().Interact();
@@ -40,11 +42,13 @@ public class ObjectInteract : MonoBehaviour
             else
             {
                 Cursor.sprite = Crosshair;
+                canInteract = false;
             }
         }
         else
         {
             Cursor.sprite = Crosshair;
+            canInteract = false;
         }
     }
 }
