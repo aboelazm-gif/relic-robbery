@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Microsoft.Unity.VisualStudio.Editor;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemyAI : MonoBehaviour
 {
@@ -12,10 +14,13 @@ public class EnemyAI : MonoBehaviour
     public float turnSpeed = 400f;
     public int maxHealth = 3;
 
+    public UnityEngine.UI.Image alertBar;
+
     int health;
     [HideInInspector] public float alertLevel = 0f;
     public float alertRate = 60f;
     public float alertDropoffRate = 30f;
+    public float alertRange = 3f;
     public float gravity = -9.81f;
     float distanceToTarget;
     public Animator animator;
@@ -30,6 +35,7 @@ public class EnemyAI : MonoBehaviour
 
     float punchTimer = 0f;
     float attackRange = 0.7f;
+    [HideInInspector] public bool playerTooClose = false;
 
     private bool isWaiting;
     bool isPunching = false;
@@ -41,11 +47,10 @@ public class EnemyAI : MonoBehaviour
     void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(Guard.position + new Vector3(0, 1, 0) + Guard.forward * attackRange, 1f);
+        Gizmos.DrawWireSphere(Guard.position, alertRange);
     }
     void Start()
     {
-        targetPoint = 0;
         isWaiting = false;
         health = maxHealth;
     }
@@ -75,15 +80,47 @@ public class EnemyAI : MonoBehaviour
         }
     }
     // Update is called once per frame
+    public void setAlert(float alert)
+    {
+        alertLevel = alert;
+        alertBar.fillAmount = alertLevel / 100f;
+    }
     void Update()
     {
+        if (player.GetComponent<MovementScript>().dead)
+        {
+            alert = false;
+            animator.SetBool("alert", false);
+            return;
+        }
+        playerTooClose = Physics.OverlapSphere(Guard.position, alertRange, LayerMask.GetMask("Player")).Length > 0 && !player.GetComponent<MovementScript>().isCrouching;
+        if (playerTooClose)
+        {
+            setAlert(alertLevel + Time.deltaTime * alertRate * 5);
+        }
         if (alertLevel > 100f)
         {
             animator.SetBool("alert", true);
             alert = true;
             patrolling = false;
+            alertBar.enabled = false;
         }
-        else alert = false;
+        else
+        {
+            alert = false;
+            if (alertLevel > 0.5f)
+            {
+                alertBar.enabled = true;
+                alertBar.transform.GetChild(0).GetComponent<UnityEngine.UI.Image>().enabled = true;
+
+            }
+            else
+            {
+                alertBar.enabled = false;
+                alertBar.transform.GetChild(0).GetComponent<UnityEngine.UI.Image>().enabled = false;
+            }
+        }
+
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("Punch 1") || animator.GetCurrentAnimatorStateInfo(0).IsName("Punch 2"))
         {
             isPunching = true;
@@ -202,7 +239,6 @@ public class EnemyAI : MonoBehaviour
         if (collidersInSphere.Length > 0)
         {
 
-            Debug.Log("Player Hit");
             collidersInSphere[0].gameObject.GetComponentInParent<PlayerHealth>().takeDamage();
         }
         //Do the action after the delay time has finished.

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class ObjectInteract : MonoBehaviour
 {
@@ -12,11 +13,21 @@ public class ObjectInteract : MonoBehaviour
     public Sprite Crosshair;
     public Sprite Interact;
     public float interactDistance = 5f;
+    public TextMeshProUGUI scoreText;
 
     [HideInInspector] public int score = 0;
     [HideInInspector] public bool canInteract = false;
 
-
+    public void setScore(int value)
+    {
+        score = value;
+        scoreText.text = "$" + score;
+    }
+    public void addScore(int value)
+    {
+        score += value;
+        scoreText.text = "$" + score;
+    }
 
     void Start()
     {

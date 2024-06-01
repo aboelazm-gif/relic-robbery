@@ -8,6 +8,9 @@ public class Billboard : MonoBehaviour
     [SerializeField] private float sizeFactor = 0.012f; // Adjust this value to set the desired size
 
     public bool scaledScreenSize = false;
+    public float minimumScale = 0;
+
+    public float maximumScale = 1000;
 
     void Start()
     {
@@ -25,7 +28,7 @@ public class Billboard : MonoBehaviour
         if (scaledScreenSize)
         {
             float distance = Vector3.Distance(transform.position, cam.position);
-            float scale = distance * sizeFactor;
+            float scale = Mathf.Clamp(distance * sizeFactor, minimumScale, maximumScale);
             transform.localScale = new Vector3(scale, scale, scale);
         }
 

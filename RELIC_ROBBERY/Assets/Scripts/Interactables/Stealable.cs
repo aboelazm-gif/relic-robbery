@@ -7,10 +7,13 @@ public class Stealable : MonoBehaviour, IInteractables
     // Start is called before the first frame update
     public GameObject weaponPrefab;
     GameObject Player;
+    Animator animator;
+    AnimatorStateInfo state;
     public int stealValue = 1000;
     void Start()
     {
         Player = GameObject.FindGameObjectsWithTag("Player")[0];
+        animator = Player.transform.GetChild(0).GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -28,7 +31,7 @@ public class Stealable : MonoBehaviour, IInteractables
     }
     void Update()
     {
-
+        state = animator.GetCurrentAnimatorStateInfo(0);
     }
     public void Interact()
     {
@@ -43,8 +46,8 @@ public class Stealable : MonoBehaviour, IInteractables
             Player.GetComponent<WeaponLogic>().changeWeapon(weaponPrefab);
 
         }
-        Player.GetComponent<ObjectInteract>().score += stealValue;
+        Player.GetComponent<ObjectInteract>().addScore(stealValue);
         Destroy(gameObject);
-        Player.transform.GetChild(0).GetComponent<Animator>().SetTrigger("Loot");
+        if (!state.IsName("Crouching")) Player.transform.GetChild(0).GetComponent<Animator>().SetTrigger("Loot");
     }
 }

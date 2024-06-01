@@ -16,12 +16,14 @@ public class MovementScript : MonoBehaviour
     public float gravity = -12f;
     public float groundDistance = 0.4f;
     public Animator animator;
+    Transform deathPoint;
 
 
     bool isSprinting = false;
     bool isMoving = false;
     [HideInInspector] public bool isCrouching = false;
     bool stealth = false;
+    [HideInInspector] public bool dead = false;
 
     float fallTimer = 0;
 
@@ -43,17 +45,27 @@ public class MovementScript : MonoBehaviour
         return Physics.CheckSphere(groundCheck.position, groundDistance, LayerMask.GetMask("Ground"));
     }
 
+    public void Die()
+    {
+        animator.SetTrigger("Die");
+        dead = true;
+    }
     void Start()
     {
         // Initialize the target height, center, and camera position with the initial values
         targetHeight = controller.height;
         targetCenter = controller.center;
         targetCameraPosition = CameraPoint.localPosition;
+        deathPoint = transform.Find("DeathCameraPoint");
     }
 
     void Update()
     {
-
+        if (dead)
+        {
+            CameraPoint.position = Vector3.Lerp(CameraPoint.position, deathPoint.position, Time.deltaTime * 2);
+            return;
+        }
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("Take Item")) return;
         //Movement
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("Hit1") || animator.GetCurrentAnimatorStateInfo(0).IsName("Hit2")) return;

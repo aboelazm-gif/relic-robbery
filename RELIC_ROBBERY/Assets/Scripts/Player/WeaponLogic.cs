@@ -34,10 +34,11 @@ public class WeaponLogic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (gameObject.GetComponent<MovementScript>().dead) return;
         canInteract = GetComponent<ObjectInteract>().canInteract;
         AnimatorStateInfo state = animator.GetCurrentAnimatorStateInfo(0);
         bool isGrounded = GetComponent<MovementScript>().isGrounded();
-        bool locked = state.IsName("Take Item") || state.IsName("Stab 1") || state.IsName("Stab 2") || state.IsName("Landing") || state.IsName("Crouching") || state.IsName("Jumping") || GetComponent<MovementScript>().isCrouching;
+        bool locked = state.IsName("Take Item") || state.IsName("Stab 1") || state.IsName("Stab 2") || state.IsName("Landing") || state.IsName("Crouching") || state.IsName("Jumping") || GetComponent<MovementScript>().isCrouching || state.IsName("Hit1") || state.IsName("Hit2");
         if (armed)
         {
             if (Input.GetMouseButtonDown(0) && !canInteract && !locked && isGrounded)
